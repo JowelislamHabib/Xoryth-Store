@@ -7,6 +7,7 @@ import type { LoginResponse, User } from "@/lib/types";
 import {
   ACCESS_TOKEN_COOKIE,
   clearSession,
+  getSession,
   setSession,
   type SessionUser,
 } from "@/lib/session";
@@ -58,6 +59,20 @@ export async function signup(_prev: AuthState, formData: FormData) {
 export async function logout() {
   await clearSession();
   redirect("/");
+}
+
+export async function updateSessionInfo(user: {
+  id: string;
+  name: string;
+  email: string;
+  role: "ADMIN" | "CUSTOMER";
+}) {
+  const session = await getSession();
+  if (!session || session.id !== user.id) {
+    return { error: "Not signed in" };
+  }
+  await setSession({ ...session, ...user });
+  return { success: true };
 }
 
 export type { SessionUser };
