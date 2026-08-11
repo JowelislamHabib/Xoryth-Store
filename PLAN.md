@@ -1,6 +1,6 @@
 # Xoryth Store — Frontend Implementation Plan
 
-**Backend:** Express + Prisma at `http://localhost:5000/api/v1` (see `prisma-neon-pgsql/FRONTEND_API.md`)
+**Backend:** Express + Prisma at `http://localhost:8000/api/v1` (see `prisma-neon-pgsql/FRONTEND_API.md`)
 **Stack:** Next.js 16.3.0 (App Router), React 19, Tailwind v4, shadcn base-nova (@base-ui), pnpm
 
 ## Core decisions
@@ -12,7 +12,7 @@
 - **Response envelope** `{status, message, data}`; errors always `status: 500` → branch on `status >= 400`, show `message`.
 - **Auth state:** login server-action sets `accessToken` httpOnly cookie (same as backend). A separate non-httpOnly `session` cookie holds `{id, name, email, role}` for client-side role gating. Server guards use `cookies().has("accessToken")`.
 - `.env.local` is gitignored → commit `.env.example` with `API_URL` / `NEXT_PUBLIC_API_URL`.
-- **Verification per phase:** `pnpm lint` + `pnpm build`; backend must run on `:5000` for runtime smoke tests.
+- **Verification per phase:** `pnpm lint` + `pnpm build`; backend must run on `:8000` for runtime smoke tests.
 - **UI:** shadcn components added via `pnpm dlx shadcn@latest add <name>` — base-nova style already configured.
 
 ## Commits (each pushed to origin)

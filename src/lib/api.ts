@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import type { ApiResponse } from "./types";
 
-const API = process.env.API_URL ?? "http://localhost:5000/api/v1";
+const API = process.env.API_URL ?? "http://localhost:8000/api/v1";
 
 export async function serverFetch<T>(
   path: string,

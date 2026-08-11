@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const API = process.env.API_URL ?? "http://localhost:5000/api/v1";
+const API = process.env.API_URL ?? "http://localhost:8000/api/v1";
 
 async function proxy(
   req: NextRequest,
