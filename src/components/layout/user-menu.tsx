@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { logout } from "@/lib/actions/auth";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -40,7 +40,11 @@ export function UserMenu({ user }: { user: SessionUser | null }) {
         }
       >
         <Avatar size="sm" className="cursor-pointer">
-          <AvatarFallback>{initials}</AvatarFallback>
+          {user.image ? (
+            <AvatarImage src={user.image} alt={user.name} />
+          ) : (
+            <AvatarFallback>{initials}</AvatarFallback>
+          )}
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
