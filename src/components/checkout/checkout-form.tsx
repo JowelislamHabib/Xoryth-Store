@@ -24,8 +24,8 @@ export function CheckoutForm() {
   const router = useRouter();
   const { items, total, clear } = useCart();
   const session = getClientSession();
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState(session?.address ?? "");
+  const [phone, setPhone] = useState(session?.phone ?? "");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
