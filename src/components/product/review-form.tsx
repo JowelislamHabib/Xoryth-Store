@@ -13,9 +13,13 @@ import { cn } from "@/lib/utils";
 export function ReviewForm({
   productId,
   existing,
+  onDone,
+  hideDelete,
 }: {
   productId: string;
   existing?: Review;
+  onDone?: () => void;
+  hideDelete?: boolean;
 }) {
   const router = useRouter();
   const [rating, setRating] = useState(existing?.rating ?? 5);
@@ -42,6 +46,7 @@ export function ReviewForm({
       setError(res.message || "Something went wrong");
       return;
     }
+    onDone?.();
     router.refresh();
   }
 
@@ -117,7 +122,7 @@ export function ReviewForm({
         >
           {existing ? "Update review" : "Submit review"}
         </Button>
-        {existing ? (
+        {existing && !hideDelete ? (
           <Button
             type="button"
             variant="destructive"

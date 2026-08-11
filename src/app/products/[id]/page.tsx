@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RatingStars } from "@/components/product/rating-stars";
 import { ReviewItem } from "@/components/product/review-item";
-import { ReviewForm } from "@/components/product/review-form";
+import { MyReview } from "@/components/product/my-review";
 import { AddToCart } from "@/components/cart/add-to-cart";
 
 export async function generateMetadata({
@@ -167,9 +167,11 @@ export default async function ProductPage({
               <h3 className="text-lg font-semibold">Reviews</h3>
               {reviewList.length > 0 ? (
                 <div className="mt-2 flex flex-col divide-y">
-                  {reviewList.map((review) => (
-                    <ReviewItem key={review.id} review={review} />
-                  ))}
+                  {reviewList
+                    .filter((review) => review.userId !== session?.id)
+                    .map((review) => (
+                      <ReviewItem key={review.id} review={review} />
+                    ))}
                 </div>
               ) : (
                 <p className="mt-2 text-sm text-muted-foreground">
@@ -184,7 +186,7 @@ export default async function ProductPage({
               </h3>
               <div className="mt-2">
                 {session ? (
-                  <ReviewForm productId={product.id} existing={myReview} />
+                  <MyReview productId={product.id} review={myReview} />
                 ) : (
                   <p className="text-sm text-muted-foreground">
                     <Button
