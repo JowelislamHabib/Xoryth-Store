@@ -33,8 +33,14 @@ export function UserMenu({ user }: { user: SessionUser | null }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger render={<Avatar size="sm" className="cursor-pointer" />}>
-        <AvatarFallback>{initials}</AvatarFallback>
+      <DropdownMenuTrigger
+        render={
+          <button type="button" className="cursor-pointer rounded-full" />
+        }
+      >
+        <Avatar size="sm" className="cursor-pointer">
+          <AvatarFallback>{initials}</AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
         <DropdownMenuLabel>
