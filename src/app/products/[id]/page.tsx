@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RatingStars } from "@/components/product/rating-stars";
 import { ReviewForm } from "@/components/product/review-form";
+import { AddToCart } from "@/components/cart/add-to-cart";
 
 export async function generateMetadata({
   params,
@@ -94,6 +95,16 @@ export default async function ProductPage({
           {product.description ? (
             <p className="text-muted-foreground">{product.description}</p>
           ) : null}
+          <AddToCart
+            variant="full"
+            product={{
+              productId: product.id,
+              name: product.name,
+              price: product.price,
+              image: product.image,
+              stock: product.stock,
+            }}
+          />
         </div>
       </div>
 

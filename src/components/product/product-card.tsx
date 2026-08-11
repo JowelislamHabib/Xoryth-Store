@@ -5,9 +5,17 @@ import type { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { AddToCart } from "@/components/cart/add-to-cart";
 
 export function ProductCard({ product }: { product: Product }) {
   const soldOut = product.stock <= 0;
+  const cartProduct = {
+    productId: product.id,
+    name: product.name,
+    price: product.price,
+    image: product.image,
+    stock: product.stock,
+  };
 
   return (
     <Card className="group overflow-hidden">
@@ -44,14 +52,17 @@ export function ProductCard({ product }: { product: Product }) {
           </p>
           <h3 className="mt-0.5 line-clamp-1 font-medium">{product.name}</h3>
         </CardContent>
-        <CardFooter className="flex items-center justify-between px-4 pb-4">
+        <CardFooter className="flex items-center justify-between gap-2 px-4 pb-4">
           <span className="font-semibold">{formatPrice(product.price)}</span>
-          {product._count?.reviews ? (
-            <span className="text-xs text-muted-foreground">
-              {product._count.reviews}{" "}
-              {product._count.reviews === 1 ? "review" : "reviews"}
-            </span>
-          ) : null}
+          <div className="flex items-center gap-2">
+            {product._count?.reviews ? (
+              <span className="text-xs text-muted-foreground">
+                {product._count.reviews}{" "}
+                {product._count.reviews === 1 ? "review" : "reviews"}
+              </span>
+            ) : null}
+            <AddToCart product={cartProduct} />
+          </div>
         </CardFooter>
       </Link>
     </Card>

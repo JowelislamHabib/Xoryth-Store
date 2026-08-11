@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { UserMenu } from "@/components/layout/user-menu";
-import { ShoppingCartIcon } from "lucide-react";
+import { CartButton } from "@/components/cart/cart-button";
 
 export async function SiteHeader() {
   const user = await getSession();
@@ -32,13 +32,7 @@ export async function SiteHeader() {
           ) : null}
         </nav>
         <div className="ml-auto flex items-center gap-2">
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="inline-flex size-8 items-center justify-center rounded-md transition-colors hover:bg-muted"
-          >
-            <ShoppingCartIcon className="size-4" />
-          </Link>
+          <CartButton />
           <UserMenu user={user} />
         </div>
       </div>
