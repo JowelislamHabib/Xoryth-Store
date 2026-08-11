@@ -53,6 +53,14 @@ export function UserMenu({ user }: { user: SessionUser | null }) {
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        {user.role === "ADMIN" ? (
+          <>
+            <DropdownMenuItem render={<Link href="/admin" />}>
+              Admin dashboard
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        ) : null}
         <DropdownMenuItem render={<Link href="/account" />}>
           Account
         </DropdownMenuItem>

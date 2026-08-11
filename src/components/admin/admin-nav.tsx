@@ -13,11 +13,16 @@ const LINKS = [
   { href: "/admin/reviews", label: "Reviews", exact: false },
 ];
 
-export function AdminNav() {
+export function AdminNav({ horizontal }: { horizontal?: boolean }) {
   const pathname = usePathname();
 
   return (
-    <nav className="flex flex-col gap-1 text-sm">
+    <nav
+      className={cn(
+        "flex gap-1 text-sm",
+        horizontal ? "flex-row" : "flex-col",
+      )}
+    >
       {LINKS.map((link) => {
         const active =
           (link.exact && pathname === link.href) ||

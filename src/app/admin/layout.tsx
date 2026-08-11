@@ -26,7 +26,12 @@ export default async function AdminLayout({
           </Link>
         </div>
       </aside>
-      <div className="min-w-0 flex-1">{children}</div>
+      <div className="min-w-0 flex-1">
+        <div className="mb-4 flex gap-1 overflow-x-auto rounded-lg border p-2 lg:hidden">
+          <AdminNav horizontal />
+        </div>
+        {children}
+      </div>
     </div>
   );
 }
