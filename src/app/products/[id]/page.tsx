@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RatingStars } from "@/components/product/rating-stars";
+import { ReviewItem } from "@/components/product/review-item";
 import { ReviewForm } from "@/components/product/review-form";
 import { AddToCart } from "@/components/cart/add-to-cart";
 
@@ -110,63 +111,99 @@ export default async function ProductPage({
 
       <Separator className="my-10" />
 
-      <section className="grid gap-8 lg:grid-cols-2">
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight">
-            Reviews ({reviewList.length})
-          </h2>
-          {reviewList.length > 0 ? (
-            <div className="mt-4 flex flex-col divide-y">
-              {reviewList.map((review) => (
-                <div key={review.id} className="flex flex-col gap-1 py-4">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium">
-                      {review.user?.name ?? "Anonymous"}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(review.createdAt).toLocaleDateString()}
+      <section>
+        <h2 className="text-2xl font-semibold tracking-tight">
+          Customer reviews
+        </h2>
+        <div className="mt-6 grid gap-10 lg:grid-cols-[280px_1fr]">
+          <div>
+            {reviewList.length > 0 ? (
+              <>
+                <div className="flex items-end gap-3">
+                  <span className="text-5xl font-bold leading-none tracking-tight">
+                    {average.toFixed(1)}
+                  </span>
+                  <div className="flex flex-col gap-1 pb-0.5">
+                    <RatingStars rating={average} size="lg" />
+                    <span className="text-sm text-muted-foreground">
+                      {reviewList.length}{" "}
+                      {reviewList.length === 1 ? "review" : "reviews"}
                     </span>
                   </div>
-                  <RatingStars rating={review.rating} />
-                  {review.comment ? (
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      {review.comment}
-                    </p>
-                  ) : null}
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="mt-4 text-muted-foreground">
-              Be the first to review this product.
-            </p>
-          )}
-        </div>
+                <div className="mt-5 flex flex-col gap-2">
+                  {[5, 4, 3, 2, 1].map((n) => {
+                    const count = reviewList.filter(
+                      (r) => r.rating === n,
+                    ).length;
+                    const pct = Math.round((count / reviewList.length) * 100);
+                    return (
+                      <div
+                        key={n}
+                        className="flex items-center gap-2 text-xs text-muted-foreground"
+                      >
+                        <span className="w-9 shrink-0 text-right">{n}★</span>
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                          <div
+                            className="h-full rounded-full bg-amber-400"
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <span className="w-7 shrink-0 tabular-nums">{count}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                No ratings yet for this product.
+              </p>
+            )}
+          </div>
 
-        <div>
-          <h2 className="text-xl font-semibold tracking-tight">
-            {myReview ? "Your review" : "Write a review"}
-          </h2>
-          {session ? (
-            <div className="mt-4">
-              <ReviewForm productId={product.id} existing={myReview} />
+          <div className="flex flex-col gap-10">
+            <div>
+              <h3 className="text-lg font-semibold">Reviews</h3>
+              {reviewList.length > 0 ? (
+                <div className="mt-2 flex flex-col divide-y">
+                  {reviewList.map((review) => (
+                    <ReviewItem key={review.id} review={review} />
+                  ))}
+                </div>
+              ) : (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Be the first to review this product.
+                </p>
+              )}
             </div>
-          ) : (
-            <p className="mt-4 text-muted-foreground">
-              <Button
-                variant="link"
-                render={
-                  <Link
-                    href={`/login?next=${encodeURIComponent(`/products/${product.id}`)}`}
-                  />
-                }
-                className="px-0"
-              >
-                Sign in
-              </Button>{" "}
-              to leave a review.
-            </p>
-          )}
+
+            <div>
+              <h3 className="text-lg font-semibold">
+                {myReview ? "Your review" : "Write a review"}
+              </h3>
+              <div className="mt-2">
+                {session ? (
+                  <ReviewForm productId={product.id} existing={myReview} />
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    <Button
+                      variant="link"
+                      render={
+                        <Link
+                          href={`/login?next=${encodeURIComponent(`/products/${product.id}`)}`}
+                        />
+                      }
+                      className="px-0"
+                    >
+                      Sign in
+                    </Button>{" "}
+                    to leave a review.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

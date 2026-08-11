@@ -7,6 +7,7 @@ import { RatingStars } from "@/components/product/rating-stars";
 import { ReviewForm } from "@/components/product/review-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
   title: "My reviews",
@@ -42,10 +43,20 @@ export default async function MyReviewsPage() {
                 {review.product?.name ?? "Product"}
               </Link>
               <span className="text-xs text-muted-foreground">
-                {new Date(review.createdAt).toLocaleDateString()}
+                {new Date(review.createdAt).toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
               </span>
             </div>
             <RatingStars rating={review.rating} />
+            {review.comment ? (
+              <p className="text-sm leading-relaxed text-foreground/90">
+                {review.comment}
+              </p>
+            ) : null}
+            <Separator />
             <ReviewForm productId={review.productId} existing={review} />
           </CardContent>
         </Card>

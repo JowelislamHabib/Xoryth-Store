@@ -2,20 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { StarIcon } from "lucide-react";
 import { api } from "@/lib/client-api";
 import type { Review } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-const RATINGS = [5, 4, 3, 2, 1];
+import { cn } from "@/lib/utils";
 
 export function ReviewForm({
   productId,
@@ -25,7 +18,8 @@ export function ReviewForm({
   existing?: Review;
 }) {
   const router = useRouter();
-  const [rating, setRating] = useState(String(existing?.rating ?? 5));
+  const [rating, setRating] = useState(existing?.rating ?? 5);
+  const [hover, setHover] = useState(0);
   const [comment, setComment] = useState(existing?.comment ?? "");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -33,12 +27,14 @@ export function ReviewForm({
   async function save(action: "create" | "update") {
     setPending(true);
     setError(null);
-    const body = { rating: Number(rating), comment, productId };
+    const body = { rating, comment, productId };
     const res = await api<Review>(
       action === "create" ? "/reviews" : `/reviews/${existing!.id}`,
       {
         method: action === "create" ? "POST" : "PATCH",
-        body: JSON.stringify(action === "create" ? body : { rating: Number(rating), comment }),
+        body: JSON.stringify(
+          action === "create" ? body : { rating, comment },
+        ),
       },
     );
     setPending(false);
@@ -64,27 +60,44 @@ export function ReviewForm({
     router.refresh();
   }
 
+  const active = hover || rating;
+
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-1.5">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
         <Label htmlFor="rating">Rating</Label>
-        <Select
-          value={rating}
-          onValueChange={(value) => {
-            if (value) setRating(value);
-          }}
+        <div
+          id="rating"
+          className="flex items-center gap-1"
+          role="radiogroup"
+          aria-label="Rating"
         >
-          <SelectTrigger id="rating" className="w-40">
-            <SelectValue>{rating} star{rating === "1" ? "" : "s"}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {RATINGS.map((r) => (
-              <SelectItem key={r} value={String(r)}>
-                {r} star{r === 1 ? "" : "s"}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          {[1, 2, 3, 4, 5].map((value) => (
+            <button
+              key={value}
+              type="button"
+              role="radio"
+              aria-checked={rating === value}
+              aria-label={`${value} star${value === 1 ? "" : "s"}`}
+              className="cursor-pointer rounded-sm p-0.5"
+              onMouseEnter={() => setHover(value)}
+              onMouseLeave={() => setHover(0)}
+              onClick={() => setRating(value)}
+            >
+              <StarIcon
+                className={cn(
+                  "size-6 transition-colors",
+                  value <= active
+                    ? "fill-amber-400 text-amber-400"
+                    : "text-muted-foreground/40",
+                )}
+              />
+            </button>
+          ))}
+          <span className="ml-1 text-sm text-muted-foreground">
+            {rating} of 5
+          </span>
+        </div>
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="comment">Comment</Label>
