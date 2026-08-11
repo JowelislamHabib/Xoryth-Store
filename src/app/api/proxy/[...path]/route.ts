@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { ACCESS_TOKEN_COOKIE } from "@/lib/cookie-names";
 
 const API = process.env.API_URL ?? "http://localhost:8000/api/v1";
 
@@ -7,7 +8,8 @@ async function proxy(
   ctx: RouteContext<"/api/proxy/[...path]">,
 ) {
   const { path } = await ctx.params;
-  const cookie = req.headers.get("cookie") ?? "";
+  const token = req.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
+  const cookie = token ? `${ACCESS_TOKEN_COOKIE}=${token}` : undefined;
 
   let res: Response;
   try {

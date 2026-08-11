@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { ACCESS_TOKEN_COOKIE } from "./cookie-names";
 import type { ApiResponse } from "./types";
 
 const API = process.env.API_URL ?? "http://localhost:8000/api/v1";
@@ -7,7 +8,8 @@ export async function serverFetch<T>(
   path: string,
   init?: RequestInit,
 ): Promise<ApiResponse<T>> {
-  const cookie = (await cookies()).toString();
+  const token = (await cookies()).get(ACCESS_TOKEN_COOKIE)?.value;
+  const cookie = token ? `${ACCESS_TOKEN_COOKIE}=${token}` : undefined;
 
   let res: Response;
   try {
