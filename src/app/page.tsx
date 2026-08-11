@@ -24,8 +24,8 @@ export default async function HomePage() {
             orders.
           </p>
         </div>
-        <Button asChild size="lg">
-          <Link href="/products">Browse products</Link>
+        <Button render={<Link href="/products" />} size="lg">
+          Browse products
         </Button>
       </section>
 
@@ -34,10 +34,12 @@ export default async function HomePage() {
           <h2 className="text-xl font-semibold tracking-tight">Categories</h2>
           <div className="mt-4 flex flex-wrap gap-2">
             {categories.map((category) => (
-              <Button key={category.id} variant="outline" asChild>
-                <Link href={`/products?category=${category.id}`}>
-                  {category.name}
-                </Link>
+              <Button
+                key={category.id}
+                variant="outline"
+                render={<Link href={`/products?category=${category.id}`} />}
+              >
+                {category.name}
               </Button>
             ))}
           </div>
@@ -47,8 +49,8 @@ export default async function HomePage() {
       <section className="mt-12">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold tracking-tight">Featured</h2>
-          <Button variant="link" asChild>
-            <Link href="/products">View all</Link>
+          <Button variant="link" render={<Link href="/products" />}>
+            View all
           </Button>
         </div>
         {featured.length > 0 ? (

@@ -68,7 +68,12 @@ export function ReviewForm({
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="rating">Rating</Label>
-        <Select value={rating} onValueChange={setRating}>
+        <Select
+          value={rating}
+          onValueChange={(value) => {
+            if (value) setRating(value);
+          }}
+        >
           <SelectTrigger id="rating" className="w-40">
             <SelectValue>{rating} star{rating === "1" ? "" : "s"}</SelectValue>
           </SelectTrigger>

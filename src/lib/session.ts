@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { ACCESS_TOKEN_COOKIE, SESSION_COOKIE } from "./cookie-names";
 import type { LoginResponse } from "./types";
 
-export const SESSION_COOKIE = "xoryth_session";
-export const ACCESS_TOKEN_COOKIE = "accessToken";
+export { ACCESS_TOKEN_COOKIE, SESSION_COOKIE };
 
 export type SessionUser = LoginResponse["user"];
 

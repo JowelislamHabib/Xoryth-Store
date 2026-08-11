@@ -27,9 +27,7 @@ export default function CartPage() {
         <p className="text-muted-foreground">
           Looks like you have not added anything yet.
         </p>
-        <Button asChild>
-          <Link href="/products">Browse products</Link>
-        </Button>
+        <Button render={<Link href="/products" />}>Browse products</Button>
       </div>
     );
   }
@@ -137,8 +135,8 @@ export default function CartPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button asChild className="w-full">
-              <Link href="/checkout">Proceed to checkout</Link>
+            <Button render={<Link href="/checkout" />} className="w-full">
+              Proceed to checkout
             </Button>
           </CardFooter>
         </Card>

@@ -4,9 +4,9 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from "react";
 
@@ -35,70 +35,73 @@ interface CartContextValue {
 }
 
 const STORAGE_KEY = "xoryth_cart";
+const EMPTY: CartItem[] = [];
+
+let cache: CartItem[] | null = null;
+const listeners = new Set<() => void>();
+
+function readSnapshot(): CartItem[] {
+  if (cache) return cache;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    cache = raw ? (JSON.parse(raw) as CartItem[]) : [];
+  } catch {
+    cache = [];
+  }
+  return cache;
+}
+
+function readServerSnapshot(): CartItem[] {
+  return EMPTY;
+}
+
+function subscribe(cb: () => void) {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+
+function persist(next: CartItem[]) {
+  cache = next;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    // ignore quota errors
+  }
+  listeners.forEach((cb) => cb());
+}
 
 const CartContext = createContext<CartContextValue | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const items = useSyncExternalStore(subscribe, readSnapshot, readServerSnapshot);
   const [isOpen, setOpen] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
 
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setItems(JSON.parse(raw) as CartItem[]);
-    } catch {
-      // ignore corrupted storage
+  const addItem = useCallback((product: CartProduct, quantity = 1) => {
+    const next = [...readSnapshot()];
+    const existing = next.find((i) => i.productId === product.productId);
+    if (existing) {
+      existing.quantity = Math.min(existing.quantity + quantity, existing.stock);
+    } else {
+      next.push({ ...product, quantity: Math.min(quantity, product.stock) });
     }
-    setHydrated(true);
+    persist(next);
   }, []);
 
-  useEffect(() => {
-    if (!hydrated) return;
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      // ignore quota errors
-    }
-  }, [items, hydrated]);
-
-  const addItem = useCallback(
-    (product: CartProduct, quantity = 1) => {
-      setItems((prev) => {
-        const existing = prev.find((i) => i.productId === product.productId);
-        if (existing) {
-          return prev.map((i) =>
-            i.productId === product.productId
-              ? { ...i, quantity: Math.min(i.quantity + quantity, i.stock) }
-              : i,
-          );
-        }
-        return [
-          ...prev,
-          { ...product, quantity: Math.min(quantity, product.stock) },
-        ];
-      });
-    },
-    [],
-  );
-
   const removeItem = useCallback((productId: string) => {
-    setItems((prev) => prev.filter((i) => i.productId !== productId));
+    persist(readSnapshot().filter((i) => i.productId !== productId));
   }, []);
 
   const setQuantity = useCallback((productId: string, quantity: number) => {
-    setItems((prev) =>
-      quantity <= 0
-        ? prev.filter((i) => i.productId !== productId)
-        : prev.map((i) =>
-            i.productId === productId
-              ? { ...i, quantity: Math.min(quantity, i.stock) }
-              : i,
-          ),
+    persist(
+      readSnapshot().map((i) =>
+        i.productId === productId
+          ? { ...i, quantity: Math.min(quantity, i.stock) }
+          : i,
+      ),
     );
   }, []);
 
-  const clear = useCallback(() => setItems([]), []);
+  const clear = useCallback(() => persist([]), []);
 
   const value = useMemo<CartContextValue>(() => {
     const count = items.reduce((sum, i) => sum + i.quantity, 0);

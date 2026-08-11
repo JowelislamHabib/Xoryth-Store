@@ -50,8 +50,8 @@ export default async function ProductPage({
 
   return (
     <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
-      <Button variant="link" asChild className="mb-4 px-0">
-        <Link href="/products">&larr; Back to products</Link>
+      <Button variant="link" render={<Link href="/products" />} className="mb-4 px-0">
+        &larr; Back to products
       </Button>
 
       <div className="grid gap-8 lg:grid-cols-2">
@@ -153,10 +153,16 @@ export default async function ProductPage({
             </div>
           ) : (
             <p className="mt-4 text-muted-foreground">
-              <Button variant="link" asChild className="px-0">
-                <Link href={`/login?next=${encodeURIComponent(`/products/${product.id}`)}`}>
-                  Sign in
-                </Link>
+              <Button
+                variant="link"
+                render={
+                  <Link
+                    href={`/login?next=${encodeURIComponent(`/products/${product.id}`)}`}
+                  />
+                }
+                className="px-0"
+              >
+                Sign in
               </Button>{" "}
               to leave a review.
             </p>

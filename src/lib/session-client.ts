@@ -1,4 +1,5 @@
-import { ACCESS_TOKEN_COOKIE, SESSION_COOKIE, type SessionUser } from "./session";
+import { ACCESS_TOKEN_COOKIE, SESSION_COOKIE } from "./cookie-names";
+import type { SessionUser } from "./session";
 
 export function getClientSession(): SessionUser | null {
   if (typeof document === "undefined") return null;

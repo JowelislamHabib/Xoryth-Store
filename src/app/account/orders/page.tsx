@@ -36,9 +36,7 @@ export default async function MyOrdersPage() {
     return (
       <div className="flex flex-col items-center gap-4 py-16 text-center">
         <p className="text-muted-foreground">You have no orders yet.</p>
-        <Button asChild>
-          <Link href="/products">Start shopping</Link>
-        </Button>
+        <Button render={<Link href="/products" />}>Start shopping</Button>
       </div>
     );
   }
@@ -72,8 +70,12 @@ export default async function MyOrdersPage() {
               {formatPrice(order.totalPrice)}
             </TableCell>
             <TableCell className="text-right">
-              <Button asChild variant="link" size="sm">
-                <Link href={`/orders/${order.id}`}>View</Link>
+              <Button
+                variant="link"
+                size="sm"
+                render={<Link href={`/orders/${order.id}`} />}
+              >
+                View
               </Button>
             </TableCell>
           </TableRow>

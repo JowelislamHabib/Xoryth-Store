@@ -35,7 +35,7 @@ export function CatalogFilters({ categories }: { categories: Category[] }) {
       <Select
         value={category}
         onValueChange={(value) =>
-          update({ category: value === "all" ? "" : value })
+          update({ category: !value || value === "all" ? "" : value })
         }
       >
         <SelectTrigger className="w-[180px]">

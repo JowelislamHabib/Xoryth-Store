@@ -19,7 +19,6 @@ import {
 export function ProfileForm({ session }: { session: SessionUser }) {
   const router = useRouter();
   const [name, setName] = useState(session.name);
-  const [email, setEmail] = useState(session.email);
   const [image, setImage] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -76,7 +75,7 @@ export function ProfileForm({ session }: { session: SessionUser }) {
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" value={email} disabled />
+          <Input id="email" value={session.email} disabled />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="image">Image URL</Label>

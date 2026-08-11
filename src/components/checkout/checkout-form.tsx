@@ -35,9 +35,7 @@ export function CheckoutForm() {
           Nothing to check out
         </h1>
         <p className="text-muted-foreground">Your cart is empty.</p>
-        <Button asChild>
-          <Link href="/products">Browse products</Link>
-        </Button>
+        <Button render={<Link href="/products" />}>Browse products</Button>
       </div>
     );
   }

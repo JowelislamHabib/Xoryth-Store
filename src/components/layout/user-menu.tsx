@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { logout } from "@/lib/actions/auth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -17,8 +17,8 @@ import type { SessionUser } from "@/lib/session";
 export function UserMenu({ user }: { user: SessionUser | null }) {
   if (!user) {
     return (
-      <Button asChild variant="outline" size="sm">
-        <Link href="/login">Sign in</Link>
+      <Button variant="outline" size="sm" render={<Link href="/login" />}>
+        Sign in
       </Button>
     );
   }
@@ -34,7 +34,6 @@ export function UserMenu({ user }: { user: SessionUser | null }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Avatar size="sm" className="cursor-pointer" />}>
-        <AvatarImage src={user.image ?? undefined} alt={user.name} />
         <AvatarFallback>{initials}</AvatarFallback>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">

@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { PackageIcon, PlusIcon, MinusIcon, Trash2Icon } from "lucide-react";
 import { useCart } from "@/components/cart/cart-provider";
 import { formatPrice } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,

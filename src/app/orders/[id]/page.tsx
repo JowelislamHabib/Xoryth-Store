@@ -120,8 +120,12 @@ export default async function OrderPage({
         </CardFooter>
       </Card>
 
-      <Button variant="outline" asChild className="mt-6">
-        <Link href="/account/orders">Back to my orders</Link>
+      <Button
+        variant="outline"
+        render={<Link href="/account/orders" />}
+        className="mt-6"
+      >
+        Back to my orders
       </Button>
     </div>
   );

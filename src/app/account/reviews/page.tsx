@@ -24,9 +24,7 @@ export default async function MyReviewsPage() {
         <p className="text-muted-foreground">
           You have not written any reviews yet.
         </p>
-        <Button asChild>
-          <Link href="/products">Browse products</Link>
-        </Button>
+        <Button render={<Link href="/products" />}>Browse products</Button>
       </div>
     );
   }
