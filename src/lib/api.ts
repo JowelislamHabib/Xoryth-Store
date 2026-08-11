@@ -9,15 +9,24 @@ export async function serverFetch<T>(
 ): Promise<ApiResponse<T>> {
   const cookie = (await cookies()).toString();
 
-  const res = await fetch(`${API}${path}`, {
-    ...init,
-    headers: {
-      "content-type": "application/json",
-      ...(cookie ? { cookie } : {}),
-      ...init?.headers,
-    },
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API}${path}`, {
+      ...init,
+      headers: {
+        "content-type": "application/json",
+        ...(cookie ? { cookie } : {}),
+        ...init?.headers,
+      },
+      cache: "no-store",
+    });
+  } catch {
+    return {
+      status: 500,
+      message: `Backend unreachable at ${API}. Is the API server running?`,
+      data: null,
+    };
+  }
 
   return res.json() as Promise<ApiResponse<T>>;
 }

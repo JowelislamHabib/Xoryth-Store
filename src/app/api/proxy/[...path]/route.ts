@@ -9,16 +9,25 @@ async function proxy(
   const { path } = await ctx.params;
   const cookie = req.headers.get("cookie") ?? "";
 
-  const res = await fetch(`${API}/${path.join("/")}`, {
-    method: req.method,
-    headers: {
-      "content-type": "application/json",
-      ...(cookie ? { cookie } : {}),
-    },
-    body: ["GET", "HEAD"].includes(req.method)
-      ? undefined
-      : JSON.stringify(await req.json().catch(() => ({}))),
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API}/${path.join("/")}`, {
+      method: req.method,
+      headers: {
+        "content-type": "application/json",
+        ...(cookie ? { cookie } : {}),
+      },
+      body: ["GET", "HEAD"].includes(req.method)
+        ? undefined
+        : JSON.stringify(await req.json().catch(() => ({}))),
+    });
+  } catch {
+    return NextResponse.json({
+      status: 500,
+      message: `Backend unreachable at ${API}. Is the API server running?`,
+      data: null,
+    });
+  }
 
   const data = await res.json();
 
