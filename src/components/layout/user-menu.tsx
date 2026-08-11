@@ -73,7 +73,9 @@ export function UserMenu({ user }: { user: SessionUser | null }) {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form action={logout}>
-          <DropdownMenuItem>Sign out</DropdownMenuItem>
+          <DropdownMenuItem render={<button type="submit" />}>
+            Sign out
+          </DropdownMenuItem>
         </form>
       </DropdownMenuContent>
     </DropdownMenu>
