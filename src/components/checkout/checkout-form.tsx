@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/client-api";
-import type { Order } from "@/lib/types";
+import type { Order, Product } from "@/lib/types";
 import { getClientSession } from "@/lib/session-client";
 import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/components/cart/cart-provider";
@@ -47,6 +47,26 @@ export function CheckoutForm() {
     }
     setPending(true);
     setError(null);
+
+    const fresh = await api<Product[]>("/products");
+    if (fresh.status >= 400 || !fresh.data) {
+      setPending(false);
+      setError(fresh.message || "Could not verify stock");
+      return;
+    }
+    const stock = new Map(
+      fresh.data.map((p) => [p.id, p.stock])
+    );
+    const over = items.filter(
+      (i) => (stock.get(i.productId) ?? 0) < i.quantity
+    );
+    if (over.length > 0) {
+      setPending(false);
+      setError(
+        `Insufficient stock: ${over.map((i) => i.name).join(", ")}`
+      );
+      return;
+    }
 
     await api(`/users/${session.id}`, {
       method: "PATCH",

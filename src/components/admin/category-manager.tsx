@@ -169,7 +169,7 @@ export function CategoryManager({ categories }: { categories: Category[] }) {
               {editing ? "Edit category" : "New category"}
             </DialogTitle>
           </DialogHeader>
-          <form action={save} className="flex flex-col gap-4">
+          <form key={editing?.id ?? "new"} action={save} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="cat-name">Name</Label>
               <Input

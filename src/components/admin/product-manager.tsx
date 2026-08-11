@@ -207,7 +207,7 @@ export function ProductManager({
               {editing ? "Edit product" : "New product"}
             </DialogTitle>
           </DialogHeader>
-          <form action={save} className="flex flex-col gap-4">
+          <form key={editing?.id ?? "new"} action={save} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="prod-name">Name</Label>
               <Input
