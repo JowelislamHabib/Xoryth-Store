@@ -122,10 +122,11 @@ export function CheckoutForm() {
           </div>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="phone">Phone</Label>
-            <Input
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+          <Input
+            id="phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
               placeholder="+1 555 000 0000"
             />
           </div>

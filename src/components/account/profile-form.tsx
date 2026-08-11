@@ -94,6 +94,7 @@ export function ProfileForm({ session }: { session: SessionUser }) {
           <Label htmlFor="phone">Phone</Label>
           <Input
             id="phone"
+            type="tel"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             placeholder="+1 555 000 0000"
