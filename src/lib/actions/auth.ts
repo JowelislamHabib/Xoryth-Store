@@ -66,6 +66,9 @@ export async function updateSessionInfo(user: {
   name: string;
   email: string;
   role: "ADMIN" | "CUSTOMER";
+  image?: string;
+  address?: string;
+  phone?: string;
 }) {
   const session = await getSession();
   if (!session || session.id !== user.id) {

@@ -19,9 +19,9 @@ import {
 export function ProfileForm({ session }: { session: SessionUser }) {
   const router = useRouter();
   const [name, setName] = useState(session.name);
-  const [image, setImage] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
+  const [image, setImage] = useState(session.image ?? "");
+  const [phone, setPhone] = useState(session.phone ?? "");
+  const [address, setAddress] = useState(session.address ?? "");
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -31,11 +31,12 @@ export function ProfileForm({ session }: { session: SessionUser }) {
     setError(null);
     setMessage(null);
 
-    const payload: Record<string, string> = {};
-    if (name !== session.name) payload.name = name;
-    if (image) payload.image = image;
-    if (phone) payload.phone = phone;
-    if (address) payload.address = address;
+    const payload: Record<string, string> = {
+      name,
+      image,
+      phone,
+      address,
+    };
 
     const res = await api(`/users/${session.id}`, {
       method: "PATCH",
@@ -53,6 +54,9 @@ export function ProfileForm({ session }: { session: SessionUser }) {
       name,
       email: session.email,
       role: session.role,
+      image,
+      address,
+      phone,
     });
     setMessage("Profile updated");
     router.refresh();

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/client-api";
+import { updateSessionInfo } from "@/lib/actions/auth";
 import type { Order, Product } from "@/lib/types";
 import { getClientSession } from "@/lib/session-client";
 import { formatPrice } from "@/lib/utils";
@@ -68,10 +69,20 @@ export function CheckoutForm() {
       return;
     }
 
-    await api(`/users/${session.id}`, {
+    const patched = await api(`/users/${session.id}`, {
       method: "PATCH",
       body: JSON.stringify({ address, phone }),
     }).catch(() => null);
+    if (patched && patched.status < 400) {
+      await updateSessionInfo({
+        id: session.id,
+        name: session.name,
+        email: session.email,
+        role: session.role,
+        address,
+        phone,
+      });
+    }
 
     const res = await api<Order>("/orders", {
       method: "POST",

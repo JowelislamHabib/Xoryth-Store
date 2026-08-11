@@ -84,7 +84,10 @@ export interface Review {
 
 export interface LoginResponse {
   accessToken: string;
-  user: Pick<User, "id" | "name" | "email" | "status" | "role">;
+  user: Pick<
+    User,
+    "id" | "name" | "email" | "status" | "role" | "image" | "address" | "phone"
+  >;
 }
 
 export type ApiResponse<T> = {
