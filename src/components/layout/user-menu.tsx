@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { logout } from "@/lib/actions/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,15 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { SessionUser } from "@/lib/session";
 
-export function UserMenu({ user }: { user: SessionUser | null }) {
-  if (!user) {
-    return (
-      <Button variant="outline" size="sm" render={<Link href="/login" />}>
-        Sign in
-      </Button>
-    );
-  }
-
+export function UserMenu({ user }: { user: SessionUser }) {
   const initials = user.name
     .split(" ")
     .map((p) => p[0])

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/session";
 import { UserMenu } from "@/components/layout/user-menu";
 import { CartButton } from "@/components/cart/cart-button";
+import { Button } from "@/components/ui/button";
 
 export async function SiteHeader() {
   const user = await getSession();
@@ -33,7 +34,18 @@ export async function SiteHeader() {
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <CartButton />
-          <UserMenu user={user} />
+          {user ? (
+            <UserMenu user={user} />
+          ) : (
+            <>
+              <Button variant="ghost" size="sm" render={<Link href="/signup" />}>
+                Register
+              </Button>
+              <Button variant="outline" size="sm" render={<Link href="/login" />}>
+                Sign in
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>
